@@ -15,14 +15,14 @@ for CP_FILE in $CP_FILES
 do
   CP_FILE_BASENAME="`basename $CP_FILE`"
 
-  CP_JAVAC="$CP_JAVAC;../lib/$CP_FILE_BASENAME"
-  CP_JAR="$CP_JAR lib/$CP_FILE_BASENAME"
+  CP_JAVAC="$CP_JAVAC;../../lib/$CP_FILE_BASENAME"
+  CP_JAR="$CP_JAR $CP_FILE_BASENAME"
 done
 cd ..
 
-echo "Compiling java sources"
-cd src
-JAVAC_OUTPUT=$($BIN_JAVAC -cp $CP_JAVAC -d ../$OUT_DIR -g `find ./com/ -type f -name "*.java"` 2>&1)
+echo "Compiling example window"
+cd src/window
+JAVAC_OUTPUT=$($BIN_JAVAC -cp $CP_JAVAC -d ../../$OUT_DIR/window -g `find . -type f -name "*.java"` 2>&1)
 JAVAC_OUTPUT_EXITCODE=$?
 
 if [[ JAVAC_OUTPUT_EXITCODE -ne 0 ]];
@@ -30,32 +30,47 @@ then
 	echo "$JAVAC_OUTPUT"
 	exit $JAVAC_OUTPUT_EXITCODE
 fi
-cd ..
+cd ../..
 
-echo "Generating manifests"
-cd $OUT_DIR
-echo "Main-Class: com.reapenshaw.server.App" > SERVER.mf
-echo "Class-Path: " >> SERVER.mf
+echo "Compiling example sprites"
+cd src/sprites
+JAVAC_OUTPUT=$($BIN_JAVAC -cp $CP_JAVAC -d ../../$OUT_DIR/sprites -g `find . -type f -name "*.java"` 2>&1)
+JAVAC_OUTPUT_EXITCODE=$?
+
+if [[ JAVAC_OUTPUT_EXITCODE -ne 0 ]];
+then
+	echo "$JAVAC_OUTPUT"
+	exit $JAVAC_OUTPUT_EXITCODE
+fi
+cd ../..
+
+echo "Compiling example fonts"
+cd src/fonts
+JAVAC_OUTPUT=$($BIN_JAVAC -cp $CP_JAVAC -d ../../$OUT_DIR/fonts -g `find . -type f -name "*.java"` 2>&1)
+JAVAC_OUTPUT_EXITCODE=$?
+
+if [[ JAVAC_OUTPUT_EXITCODE -ne 0 ]];
+then
+	echo "$JAVAC_OUTPUT"
+	exit $JAVAC_OUTPUT_EXITCODE
+fi
+cd ../..
+
+echo "Generating manifest"
+cd out
+echo "Main-Class: be.labruyere.examples.App" > APP.mf
+echo "Class-Path: " >> APP.mf
 
 for CP_FILE in $CP_JAR
 do
-    echo " $CP_FILE " >> SERVER.mf
+    echo " $CP_FILE " >> APP.mf
 done
 
-echo "" >> SERVER.mf
-
-echo "Main-Class: com.reapenshaw.client.App" > CLIENT.mf
-echo "Class-Path: " >> CLIENT.mf
-
-for CP_FILE in $CP_JAR
-do
-    echo " $CP_FILE " >> CLIENT.mf
-done
-
-echo "" >> CLIENT.mf
+echo "" >> APP.mf
 
 echo "Generating jars"
-JAR_OUTPUT=$($BIN_JAR -cfm rsw-server.jar ./SERVER.mf `find ./com/ -type f -name *".class"` 2>&1)
+cd window
+JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-window.jar ../APP.mf `find . -type f -name *".class"` 2>&1)
 JAR_OUTPUT_EXITCODE=$?
 
 if [[ JAR_OUTPUT_EXITCODE -ne 0 ]];
@@ -63,8 +78,10 @@ then
 	echo "$JAR_OUTPUT"
 	exit $JAR_OUTPUT_EXITCODE
 fi
+cd ..
 
-JAR_OUTPUT=$($BIN_JAR -cfm rsw-client.jar ./CLIENT.mf `find ./com/ -type f -name *".class"` 2>&1)
+cd sprites
+JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-sprites.jar ../APP.mf `find . -type f -name *".class"` 2>&1)
 JAR_OUTPUT_EXITCODE=$?
 
 if [[ JAR_OUTPUT_EXITCODE -ne 0 ]];
@@ -72,14 +89,26 @@ then
 	echo "$JAR_OUTPUT"
 	exit $JAR_OUTPUT_EXITCODE
 fi
+cd ..
+
+cd fonts
+JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-fonts.jar ../APP.mf `find . -type f -name *".class"` 2>&1)
+JAR_OUTPUT_EXITCODE=$?
+
+if [[ JAR_OUTPUT_EXITCODE -ne 0 ]];
+then
+	echo "$JAR_OUTPUT"
+	exit $JAR_OUTPUT_EXITCODE
+fi
+cd ..
 
 echo "Copying resources"
-cp -r ../lib/ .
+cp -r ../lib/*.jar .
 cp -r ../assets/ .
-cp -r ../maps/ .
-cp -r ../*.db .
 
-echo "Cleaning up"
+echo "Cleanup"
 rm `find ./assets -type f -name "*.xcf"`
-rm -r ./com/
+rm -r window/
+rm -r sprites/
+rm -r fonts/
 rm *.mf
