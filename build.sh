@@ -70,7 +70,7 @@ echo "" >> APP.mf
 
 echo "Generating jars"
 cd window
-JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-window.jar ../APP.mf `find . -type f -name *".class"` 2>&1)
+JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-window.jar ../APP.mf `find . -type f -name "*.class"` 2>&1)
 JAR_OUTPUT_EXITCODE=$?
 
 if [[ JAR_OUTPUT_EXITCODE -ne 0 ]];
@@ -81,7 +81,7 @@ fi
 cd ..
 
 cd sprites
-JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-sprites.jar ../APP.mf `find . -type f -name *".class"` 2>&1)
+JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-sprites.jar ../APP.mf `find . -type f -name "*.class"` 2>&1)
 JAR_OUTPUT_EXITCODE=$?
 
 if [[ JAR_OUTPUT_EXITCODE -ne 0 ]];
@@ -92,7 +92,7 @@ fi
 cd ..
 
 cd fonts
-JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-fonts.jar ../APP.mf `find . -type f -name *".class"` 2>&1)
+JAR_OUTPUT=$($BIN_JAR -cfm ../jarqanore-fonts.jar ../APP.mf `find . -type f -name "*.class"` 2>&1)
 JAR_OUTPUT_EXITCODE=$?
 
 if [[ JAR_OUTPUT_EXITCODE -ne 0 ]];
