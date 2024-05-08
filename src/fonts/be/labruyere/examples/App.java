@@ -57,7 +57,7 @@ public class App {
             window.onClose(fqn, "onClose");
             window.onUpdate(fqn, "onUpdate");
             window.onRender2D(fqn, "onRender2D");
-            window.open(false, true);
+            window.open(false, true, true);
             window.delete();
         } catch (Exception e) {
             e.printStackTrace();
