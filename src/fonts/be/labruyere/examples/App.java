@@ -11,14 +11,21 @@ import be.labruyere.arqanore.enums.Keys;
 public class App {
     private static Window window;
     private static Font font;
+    private static String text;
     
     private static void onOpen() {
         try {
             font = new Font("assets/default.ttf", 16, 16);
+            text = "This is an éxàmple piëce öf text containing UTF-16 ©hara©ters!";
         } catch (Exception e) {
             e.printStackTrace();
             window.close();
         }
+        
+        System.out.println(text.length());
+        System.out.println();
+        
+        var width = font.measure(text, 1);
     }
     
     private static void onClose() {
@@ -41,7 +48,7 @@ public class App {
             var position = new Vector2(32, 32);
             var scale = new Vector2(1, 1);
         
-            Renderer.renderText(window, font, "This is an example piece of text!", position, scale, Color.WHITE);
+            Renderer.renderText(window, font, text, position, scale, Color.WHITE);
         } catch (Exception e) {
             e.printStackTrace();
             window.close();
