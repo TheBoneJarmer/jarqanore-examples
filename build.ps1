@@ -119,6 +119,7 @@ function Cleanup() {
     
     Write-Host "Cleanup"
     RemoveFolderIfExists "$cwd/out/com"
+    Remove-Item -Path "$cwd/out/*.mf"
 }
 
 # EXECUTION
