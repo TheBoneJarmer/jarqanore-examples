@@ -73,7 +73,8 @@ function CopyResources() {
     Write-Host "Copying lib files"
 
     if ($IsWindows) {
-        Copy-Item -Path "lib/*" -Destination $cwd/out/ -Recurse > $null
+        Copy-Item -Path "lib/*.dll" -Destination $cwd/out/ -Recurse > $null
+        Copy-Item -Path "lib/*.jar" -Destination $cwd/out/lib/ -Recurse > $null
     }
 
     if ($IsLinux) {
