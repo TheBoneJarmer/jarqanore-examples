@@ -113,9 +113,9 @@ function BuildJar() {
 		Write-Host "Building jars"
         Set-Location $cwd/out
         Invoke-Expression "$JAR -cfm example-window.jar WINDOW.mf ./com/reapenshaw/examples/window/"
-        Invoke-Expression "$JAR -cfe example-fonts.jar com.reapenshaw.examples.fonts.App ./com/reapenshaw/examples/fonts/"
-        Invoke-Expression "$JAR -cfe example-shaders.jar com.reapenshaw.examples.shaders.App ./com/reapenshaw/examples/shaders/"
-        Invoke-Expression "$JAR -cfe example-sprites.jar com.reapenshaw.examples.sprites.App ./com/reapenshaw/examples/sprites/"
+        Invoke-Expression "$JAR -cfm example-fonts.jar FONTS.mf ./com/reapenshaw/examples/fonts/"
+        Invoke-Expression "$JAR -cfm example-shaders.jar SHADERS.mf ./com/reapenshaw/examples/shaders/"
+        Invoke-Expression "$JAR -cfm example-sprites.jar SPRITES.mf ./com/reapenshaw/examples/sprites/"
         Set-Location $cwd
     } catch {
         Write-Host $_
