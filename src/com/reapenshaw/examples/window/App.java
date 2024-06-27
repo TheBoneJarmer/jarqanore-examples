@@ -1,4 +1,4 @@
-package be.labruyere.examples;
+package com.reapenshaw.examples.window;
 
 import be.labruyere.arqanore.Window;
 import be.labruyere.arqanore.Keyboard;
@@ -31,7 +31,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        var fqn = "be/labruyere/examples/App";
+        var fqn = "com/reapenshaw/examples/window/App";
     
         try {
             window = new Window(1440, 786, "JArqanore Example");

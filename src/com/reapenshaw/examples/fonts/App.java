@@ -1,8 +1,8 @@
-package be.labruyere.examples;
+package com.reapenshaw.examples.fonts;
 
 import be.labruyere.arqanore.Window;
 import be.labruyere.arqanore.Keyboard;
-import be.labruyere.arqanore.Sprite;
+import be.labruyere.arqanore.Font;
 import be.labruyere.arqanore.Renderer;
 import be.labruyere.arqanore.Vector2;
 import be.labruyere.arqanore.Color;
@@ -10,19 +10,26 @@ import be.labruyere.arqanore.enums.Keys;
 
 public class App {
     private static Window window;
-    private static Sprite sprite;
+    private static Font font;
+    private static String text;
     
     private static void onOpen() {
         try {
-            sprite = new Sprite("assets/player.png", 16, 16);
+            font = new Font("assets/default.ttf", 16, 16);
+            text = "This is an éxàmple piëce öf text containing UTF-16 ©hara©ters!";
         } catch (Exception e) {
             e.printStackTrace();
             window.close();
         }
+        
+        System.out.println(text.length());
+        System.out.println();
+        
+        var width = font.measure(text, 1);
     }
     
     private static void onClose() {
-        sprite.delete();
+        font.delete();
     }
     
     private static void onUpdate(double at) {
@@ -39,10 +46,9 @@ public class App {
     private static void onRender2D() {
         try {
             var position = new Vector2(32, 32);
-            var scale = new Vector2(4, 4);
-            var origin = new Vector2(0, 0);
+            var scale = new Vector2(1, 1);
         
-            Renderer.renderSprite(window, sprite, position, scale, origin, 0, 0, 0, false, false, Color.WHITE);
+            Renderer.renderText(window, font, text, position, scale, Color.WHITE);
         } catch (Exception e) {
             e.printStackTrace();
             window.close();
@@ -50,7 +56,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        var fqn = "be/labruyere/examples/App";
+        var fqn = "com/reapenshaw/examples/fonts/App";
     
         try {
             window = new Window(1440, 786, "JArqanore Example");

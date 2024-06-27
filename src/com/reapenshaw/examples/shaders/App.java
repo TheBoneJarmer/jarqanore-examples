@@ -1,63 +1,59 @@
-package be.labruyere.examples;
+package com.reapenshaw.examples.shaders;
 
-import be.labruyere.arqanore.Window;
-import be.labruyere.arqanore.Keyboard;
-import be.labruyere.arqanore.Font;
-import be.labruyere.arqanore.Renderer;
-import be.labruyere.arqanore.Vector2;
-import be.labruyere.arqanore.Color;
+import be.labruyere.arqanore.*;
 import be.labruyere.arqanore.enums.Keys;
+import be.labruyere.arqanore.enums.ShaderTarget;
+import be.labruyere.arqanore.enums.ShaderType;
+import be.labruyere.arqanore.exceptions.ArqanoreException;
 
 public class App {
     private static Window window;
-    private static Font font;
-    private static String text;
-    
+    private static Sprite sprite;
+    private static Shader shader;
+
     private static void onOpen() {
         try {
-            font = new Font("assets/default.ttf", 16, 16);
-            text = "This is an éxàmple piëce öf text containing UTF-16 ©hara©ters!";
-        } catch (Exception e) {
+            shader = new Shader();
+            shader.addSource("assets/sprity_v.glsl", ShaderType.VERTEX);
+            shader.addSource("assets/sprity_f.glsl", ShaderType.FRAGMENT);
+            shader.compile();
+
+            sprite = new Sprite("assets/player.png", 16, 16);
+        } catch (ArqanoreException e) {
             e.printStackTrace();
             window.close();
         }
-        
-        System.out.println(text.length());
-        System.out.println();
-        
-        var width = font.measure(text, 1);
     }
-    
+
     private static void onClose() {
-        font.delete();
+        shader.delete();
+        sprite.delete();
     }
-    
+
     private static void onUpdate(double at) {
         try {
             if (Keyboard.keyPressed(Keys.ESCAPE)) {
                 window.close();
-            }  
+            }
         } catch (Exception e) {
             e.printStackTrace();
             window.close();
         }
     }
-    
+
     private static void onRender2D() {
         try {
-            var position = new Vector2(32, 32);
-            var scale = new Vector2(1, 1);
-        
-            Renderer.renderText(window, font, text, position, scale, Color.WHITE);
-        } catch (Exception e) {
+            Renderer.setShader(shader, ShaderTarget.SPRITE);
+            Renderer.renderSprite(window, sprite, 32, 32, 4, 4, 0, 0, 0, 0, 0, false, false, 255, 255, 255, 255);
+        } catch (ArqanoreException e) {
             e.printStackTrace();
             window.close();
         }
     }
 
     public static void main(String[] args) {
-        var fqn = "be/labruyere/examples/App";
-    
+        var fqn = "com/reapenshaw/examples/shaders/App";
+
         try {
             window = new Window(1440, 786, "JArqanore Example");
             window.onOpen(fqn, "onOpen");
