@@ -71,7 +71,14 @@ function CopyResources() {
     $cwd = GetFullPath "."
 
     Write-Host "Copying lib files"
-    Copy-Item -Path "lib/" -Destination $cwd/out/ -Recurse > $null
+
+    if ($IsWindows) {
+        Copy-Item -Path "lib/*" -Destination $cwd/out/ -Recurse > $null
+    }
+
+    if ($IsLinux) {
+        Copy-Item -Path "lib/" -Destination $cwd/out/ -Recurse > $null
+    }
 
     Write-Host "Copying asset files"
     Copy-Item -Path "assets/" -Destination $cwd/out/ -Recurse > $null
